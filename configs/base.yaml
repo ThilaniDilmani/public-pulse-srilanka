@@ -1,0 +1,11 @@
+database:
+  url_env_var: DATABASE_URL   # actual value comes from .env / GitHub Secrets
+
+paths:
+  data_raw: data/raw
+  data_interim: data/interim
+  data_processed: data/processed
+  golden_sample: data/golden_sample
+
+model_base: xlm-roberta-base
+max_seq_length: 512

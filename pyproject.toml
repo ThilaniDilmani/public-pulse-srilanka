@@ -1,0 +1,31 @@
+[project]
+name = "public-pulse"
+version = "0.1.0"
+description = "Civic-intelligence NLP platform for Sri Lankan media discourse."
+requires-python = ">=3.11"
+dependencies = [
+    "transformers>=4.40",
+    "torch>=2.2",
+    "datasets>=2.19",
+    "scikit-learn>=1.4",
+    "pandas>=2.2",
+    "fastapi>=0.111",
+    "uvicorn>=0.29",
+    "sqlalchemy>=2.0",
+    "psycopg2-binary>=2.9",
+    "pydantic>=2.7",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+    "google-api-python-client>=2.126",
+    "streamlit>=1.35",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "nbstripout>=0.7",
+    "jupyter>=1.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

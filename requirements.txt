@@ -1,0 +1,47 @@
+# ============================================================
+# Public Pulse — requirements.txt
+# Mirrors pyproject.toml; provided separately for Colab / pip
+# environments that expect requirements.txt directly.
+# Install: pip install -r requirements.txt
+# ============================================================
+
+# --- Data handling ---
+pandas>=2.2
+numpy>=1.26
+openpyxl>=3.1          # reading/writing .xlsx (Public_Pulse_Dataset_v2.xlsx)
+
+# --- YouTube data collection ---
+google-api-python-client>=2.126
+
+# --- LLM-assisted labeling (Colab / Gemini) ---
+google-generativeai>=0.7
+tqdm>=4.66
+
+# --- Modeling: XLM-RoBERTa fine-tuning (4-layer cascade) ---
+transformers>=4.40
+torch>=2.2
+datasets>=2.19
+scikit-learn>=1.4
+accelerate>=0.30       # needed by Trainer for efficient multi-batch training
+sentencepiece>=0.2      # required by XLM-RoBERTa's tokenizer
+
+# --- Database ---
+sqlalchemy>=2.0
+psycopg2-binary>=2.9    # Postgres driver (Supabase/Neon)
+
+# --- API ---
+fastapi>=0.111
+uvicorn>=0.29
+pydantic>=2.7
+
+# --- Dashboard ---
+streamlit>=1.35
+
+# --- Config & secrets ---
+pyyaml>=6.0
+python-dotenv>=1.0
+
+# --- Dev / testing (optional — comment out for production/HF Spaces builds) ---
+pytest>=8.2
+nbstripout>=0.7
+jupyter>=1.0

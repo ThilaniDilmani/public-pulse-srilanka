@@ -1,0 +1,8 @@
+layer: layer4
+label_map_path: models/layer4_*/label_map.json   # fill in exact folder name
+train_split: data/splits/layer4/train.csv
+val_split: data/splits/layer4/val.csv
+test_split: data/splits/layer4/test.csv
+learning_rate: 2e-5
+batch_size: 16
+num_epochs: 4

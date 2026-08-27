@@ -1,0 +1,95 @@
+# ============================================================
+# Environment & Secrets
+# ============================================================
+
+.env
+.env.*
+!.env.example
+
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache / compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ============================================================
+# Jupyter
+# ============================================================
+
+.ipynb_checkpoints/
+
+
+# ============================================================
+# Data
+# ============================================================
+# Keep project datasets in Git so team members can access them.
+#
+# IMPORTANT:
+# Do NOT put private, licensed, or extremely large datasets
+# into Git. Use Git LFS / Hugging Face / cloud storage instead.
+
+# Temporary/local data files
+data/**/.DS_Store
+
+
+# ============================================================
+# Models
+# ============================================================
+# Keep model files in Git if they are small enough.
+#
+# Large model checkpoints should use Git LFS or Hugging Face Hub.
+# Do NOT ignore the entire models directory.
+
+# Ignore temporary model training files
+models/**/runs/
+models/**/logs/
+models/**/tmp/
+
+
+# ============================================================
+# Experiment Logs / Temporary Outputs
+# ============================================================
+
+# Keep important experiment results in Git.
+# Ignore only temporary/generated logs.
+
+results/experiment_logs/*.log
+results/experiment_logs/*.tmp
+
+
+# ============================================================
+# Python / ML tooling
+# ============================================================
+
+*.pkl.tmp
+*.joblib.tmp
+*.h5.tmp
+*.keras.tmp
+
+# TensorBoard logs
+**/events.out.tfevents.*
+
+
+# ============================================================
+# OS / IDE
+# ============================================================
+
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea/
+
+# ============================================================
+# Temporary files
+# ============================================================
+
+*.tmp
+*.temp
+*.bak
+*.swp
+*~

@@ -1,0 +1,20 @@
+name: Scheduled Scraper
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours (not guaranteed exact on free tier)
+  workflow_dispatch: {}
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install .
+      - run: python scripts/scrape_historical.py
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

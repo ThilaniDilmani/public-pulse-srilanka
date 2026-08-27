@@ -1,0 +1,6 @@
+{
+  "base_model": "xlm-roberta-base",
+  "huggingface_hub_repo": "your-username/public-pulse-layer2-topic",
+  "num_labels": 6,
+  "max_seq_length": 128
+}

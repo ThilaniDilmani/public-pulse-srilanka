@@ -1,0 +1,1 @@
+"""Sarcasm/humor indicator component."""
