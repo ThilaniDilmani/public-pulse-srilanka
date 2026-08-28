@@ -8,4 +8,4 @@ paths:
   golden_sample: data/golden_sample
 
 model_base: xlm-roberta-base
-max_seq_length: 512
+max_seq_length: 256
