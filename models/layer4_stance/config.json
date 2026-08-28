@@ -2,5 +2,5 @@
   "base_model": "xlm-roberta-base",
   "huggingface_hub_repo": "your-username/public-pulse-layer4-stance",
   "num_labels": 5,
-  "max_seq_length": 128
+  "max_seq_length": 256
 }
