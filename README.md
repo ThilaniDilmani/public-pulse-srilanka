@@ -187,8 +187,6 @@ This is a group project built and maintained by:
 | Thrithwaka | [@thrithwaka](https://github.com/Thrithwaka) |
 | Malith | [@malith](https://github.com/sankalpams) |
 
-> ⚠️ **Before publishing this README:** the GitHub usernames above are placeholders and almost certainly do not point to the correct profiles. Each contributor should replace their own link with their real GitHub profile URL (e.g. `https://github.com/actual-username`) before this goes live — please don't leave these as-is, since they may currently point to unrelated real accounts.
-
 ---
 
 ## Acknowledgments
