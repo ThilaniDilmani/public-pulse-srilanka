@@ -1,0 +1,19 @@
+{
+  "base_model": "xlm-roberta-base",
+  "num_labels": 6,
+  "max_seq_length": 256,
+  "best_metric": "f1_macro",
+  "best_metric_value": 0.6853518709719536,
+  "class_weights_used": {
+    "TOPIC_ECON": 3.1957,
+    "TOPIC_FOR": 2.5646,
+    "TOPIC_GOV": 0.2314,
+    "TOPIC_LAW": 2.5646,
+    "TOPIC_MEDIA": 2.5646,
+    "TOPIC_SERV": 5.1036
+  },
+  "weighting_note": "Weights computed from post-oversampling train distribution, not pre-oversampling -- see Section 6",
+  "random_seed": 42,
+  "train_rows": 6155,
+  "val_rows": 1153
+}
