@@ -7,5 +7,11 @@ paths:
   data_processed: data/processed
   golden_sample: data/golden_sample
 
+# Active model cascade: Layer 1 -> Layer 2 -> Layer 4. Layer 3 was removed as a
+# documented research-scope decision (data-sufficiency, ~7% label coverage) and
+# must not be reintroduced. See docs/taxonomy.md for the full explanation.
 model_base: xlm-roberta-base
+# Corrected from 128 -> 256 in the Phase 1 taxonomy pass: 01_data_preparation.ipynb
+# found 2.18% real-data truncation at 128 (99th percentile = 183 tokens), and
+# 02_training.ipynb confirmed 256 as the value actually used for all three layers.
 max_seq_length: 256

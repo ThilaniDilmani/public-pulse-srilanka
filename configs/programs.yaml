@@ -1,0 +1,89 @@
+# Authoritative Target Program Configuration for Public Pulse Phase 6
+# Source: Project Reference PDF
+# Do NOT invent program names, playlist IDs, or program classifications.
+# program_type is intentionally null for all programs.
+
+programs:
+  - program_name: "bai thakshalawa"
+    channel_id: "UCKQo4WI1lxhygYrrSo5TkuQ"
+    playlist_id: "PL8m5cFsG6joS___AwyttjIsBy1cs3nLMK"
+    program_type: null
+    keywords: ["bai thakshalawa", "බයි තක්ෂලාව"]
+
+  - program_name: "Hiru Salakuna (Hiru)"
+    channel_id: "UCckltLEhFLv8Xz_lQhYfwmg"
+    playlist_id: "PLdKFCUSuUa1ZjTqcN8mmAzBjQOKnQ2Wmp"
+    program_type: null
+    keywords: ["Salakuna", "සලකුණ"]
+
+  - program_name: "Derana 360 (Derana)"
+    channel_id: "UCCK3OZi788Ok44K97WAhLKQ"
+    playlist_id: "PLkkCdeu97j3C1k9B3UcGVBlEEIl5Sjk91"
+    program_type: null
+    keywords: ["Derana 360", "360"]
+
+  - program_name: "Truth with Chamuditha"
+    channel_id: "UCfdBd-9WWZUv1h7d80Omy8g"
+    playlist_id: null
+    program_type: null
+    keywords: ["Chamuditha", "Truth with Chamuditha"]
+
+  - program_name: "Hari TV - Lahiru Mudalige"
+    channel_id: "UC0RX5hQE6UpHTjfub4NZSPg"
+    playlist_id: null
+    program_type: null
+    keywords: ["Hari TV", "Lahiru Mudalige"]
+
+  - program_name: "Hiru Balaya (Hiru)"
+    channel_id: "UCckltLEhFLv8Xz_lQhYfwmg"
+    playlist_id: "PLdKFCUSuUa1apqRDuj7DesaDF-7h_Bm3D"
+    program_type: null
+    keywords: ["Hiru Balaya", "බලය"]
+
+  - program_name: "Sirasa Satana"
+    channel_id: "UCgnFSj7jQffD5V5m05j4dPw"
+    playlist_id: "PLwBEINflt3JGKH1zzFy3mgu29ahrB3maJ"
+    program_type: null
+    keywords: ["Satana", "සටන"]
+
+  - program_name: "Sudaa creation"
+    channel_id: "UC3tvYy-s84yySG7V85jRDnA"
+    playlist_id: null
+    program_type: null
+    keywords: ["Sudaa", "Sudaa creation"]
+
+  - program_name: "Wada pitiyaa (Ada derana)"
+    channel_id: "UCCK3OZi788Ok44K97WAhLKQ"
+    playlist_id: "PLkkCdeu97j3CM896xOXvIZsVp49HZ2Oe7"
+    program_type: null
+    keywords: ["Wada pitiyaa", "වැඩපිටිය"]
+
+  - program_name: "Sirasa dawasa"
+    channel_id: "UCgnFSj7jQffD5V5m05j4dPw"
+    playlist_id: "PLwBEINflt3JHmzxrEoMD7bzA8Lo5yfSRc"
+    program_type: null
+    keywords: ["Dawasa", "දවස"]
+
+  - program_name: "Rathu ira (Swarnawahini)"
+    channel_id: "UCcijXxFzSXgoM6q9cCtT9PA"
+    playlist_id: "PLiPJeymWD44MdfLc7W_9sYE6RbxW77kSM"
+    program_type: null
+    keywords: ["Rathu ira", "රතු ඉර"]
+
+  - program_name: "Paththare visthare (Hiru News)"
+    channel_id: "UCckltLEhFLv8Xz_lQhYfwmg"
+    playlist_id: "PLdKFCUSuUa1bak-Y3w8rIL9PFO9gBTEfD"
+    program_type: null
+    keywords: ["Paththare visthare", "පත්තරේ විස්තරේ"]
+
+  - program_name: "Hiru news 6.55pm (Hiru newa)"
+    channel_id: "UCckltLEhFLv8Xz_lQhYfwmg"
+    playlist_id: "PLdKFCUSuUa1aBMMrERhD2ONKi0Nc0DLDu"
+    program_type: null
+    keywords: ["Hiru news 6.55pm", "Hiru news"]
+
+  - program_name: "Ada derana 6.55 (Ada derana)"
+    channel_id: "UCCK3OZi788Ok44K97WAhLKQ"
+    playlist_id: "PLkkCdeu97j3DDsSAG866tOV9O54doYEst"
+    program_type: null
+    keywords: ["Ada derana 6.55", "Ada derana"]
