@@ -1,8 +1,31 @@
 layer: layer2
-label_map_path: models/layer2_*/label_map.json   # fill in exact folder name
+label_map_path: models/layer2_topic/label_map.json
+config_path: models/layer2_topic/config.json
+checkpoint_path: models/layer2_topic/checkpoints/best_model
+
+model_input_column: text_clean   # Layer 2 uses cleaned comment text (see src/public_pulse/preprocessing)
+max_seq_length: 256
+
 train_split: data/splits/layer2/train.csv
 val_split: data/splits/layer2/val.csv
 test_split: data/splits/layer2/test.csv
+
+# Training hyperparameters as documented in layer2_02_training_final.ipynb (this
+# file documents the existing notebook methodology -- it does NOT define a new
+# training pipeline).
 learning_rate: 2e-5
-batch_size: 16
+train_batch_size: 16
+eval_batch_size: 32
 num_epochs: 4
+weight_decay: 0.01
+warmup_ratio: 0.1
+seed: 42
+class_weighting: weighted_cross_entropy   # weights computed post-oversampling, see class_weights.json (Phase 2)
+oversampling:
+  applied_to: train_split_only
+  floor_per_class: 400
+  max_multiplier: 3
+model_selection_metric: eval_macro_f1
+
+# 5 final classes: TOPIC_ECON_SERV, TOPIC_FOR, TOPIC_GOV, TOPIC_LAW, TOPIC_MEDIA.
+# TOPIC_ECON and TOPIC_SERV were merged into TOPIC_ECON_SERV -- do not restore the split.
