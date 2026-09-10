@@ -1,7 +1,5 @@
 {
-  "STANCE_CRIT_DIR": 0,
-  "STANCE_CRIT_SARC": 1,
-  "STANCE_SUPP": 2,
-  "STANCE_NEUT": 3,
-  "NULL": 4
+  "STANCE_CRIT": 0,
+  "STANCE_NEUT": 1,
+  "STANCE_SUPP": 2
 }

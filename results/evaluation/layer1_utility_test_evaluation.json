@@ -1,0 +1,77 @@
+{
+  "layer": "layer1_utility",
+  "checkpoint": "/content/drive/MyDrive/public-pulse-srilanka/models/layer1_utility/checkpoints/best_model",
+  "n_test_samples": 1394,
+  "accuracy": 0.9892395982783357,
+  "macro_f1": 0.9812182535939964,
+  "validation_macro_f1": 0.9912050545456186,
+  "val_test_gap": 0.009986800951622188,
+  "per_class_report": {
+    "VALID": {
+      "precision": 0.9939236111111112,
+      "recall": 0.9930615784908933,
+      "f1-score": 0.9934924078091106,
+      "support": 1153.0
+    },
+    "NOISE": {
+      "precision": 0.9669421487603306,
+      "recall": 0.970954356846473,
+      "f1-score": 0.968944099378882,
+      "support": 241.0
+    },
+    "accuracy": 0.9892395982783357,
+    "macro avg": {
+      "precision": 0.9804328799357209,
+      "recall": 0.9820079676686831,
+      "f1-score": 0.9812182535939964,
+      "support": 1394.0
+    },
+    "weighted avg": {
+      "precision": 0.9892589537032644,
+      "recall": 0.9892395982783357,
+      "f1-score": 0.9892484032670124,
+      "support": 1394.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      1145,
+      8
+    ],
+    [
+      7,
+      234
+    ]
+  ],
+  "label_names": [
+    "VALID",
+    "NOISE"
+  ],
+  "language_breakdown": [
+    {
+      "language_detected": "Sinhala",
+      "n": 521,
+      "macro_f1": 0.8095760233918128
+    },
+    {
+      "language_detected": "English",
+      "n": 279,
+      "macro_f1": 0.8248587570621468
+    },
+    {
+      "language_detected": "Mixed",
+      "n": 126,
+      "macro_f1": 1.0
+    },
+    {
+      "language_detected": "Emoji_only",
+      "n": 220,
+      "macro_f1": 1.0
+    },
+    {
+      "language_detected": "Singlish",
+      "n": 248,
+      "macro_f1": 1.0
+    }
+  ]
+}

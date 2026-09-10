@@ -1,0 +1,9 @@
+{
+  "base_model": "xlm-roberta-base",
+  "max_seq_length": 256,
+  "best_metric": "f1_macro",
+  "best_metric_value": 0.9912050545456186,
+  "random_seed": 42,
+  "train_rows": 6503,
+  "val_rows": 1393
+}
