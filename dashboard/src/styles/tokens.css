@@ -1,0 +1,79 @@
+:root {
+  /* Surface & Canvas (Dominant White & Light Neutral) */
+  --color-bg: #F8FAFC;              /* Slate 50 - Application Canvas */
+  --color-surface: #FFFFFF;         /* Pure White - Main Surface */
+  --color-surface-hover: #F1F5F9;   /* Slate 100 - Subtlest Control Hover */
+  --color-surface-subtle: #F8FAFC;  /* Neutral Subpanel */
+  --color-surface-sunken: #F1F5F9;  /* Inset / Input background */
+  
+  --color-border: #E2E8F0;          /* Slate 200 - Main Divider & Border */
+  --color-border-subtle: #F1F5F9;   /* Slate 100 - Inner Divider */
+  --color-border-strong: #CBD5E1;   /* Slate 300 - Interactive Control Border */
+
+  /* Text & Typography Colors */
+  --color-text-main: #0F172A;       /* Slate 900 - High Contrast Titles */
+  --color-text-muted: #475569;      /* Slate 600 - Primary Body Text */
+  --color-text-subtle: #64748B;     /* Slate 500 - Captions & Secondary Metadata */
+  --color-text-light: #94A3B8;      /* Slate 400 - Disabled & De-emphasized */
+  --color-text-on-primary: #FFFFFF;
+
+  /* Primary Interaction Accent (Modern Analytics Blue) */
+  --color-primary-600: #1D4ED8;     /* Active Control / Focus Ring */
+  --color-primary-500: #2563EB;     /* Primary Links, Buttons, Active Controls */
+  --color-primary-100: #EFF6FF;     /* Active Nav / Selected Pill Surface */
+  --color-primary-50:  #F8FAFC;
+
+  /* Public Pulse Brand Identity Colors (USED HIERARCHICALLY) */
+  --color-brand-maroon: #9B2335;    /* National Identity & Brand Crest Accent */
+  --color-brand-maroon-subtle: #FDF2F4;
+  --color-brand-gold: #D4AC0D;      /* Grounded AI & Insight Highlight */
+  --color-brand-gold-subtle: #FEFCE8;
+  --color-brand-green: #16A34A;     /* System Validation & Supportive Stance */
+  --color-brand-saffron: #D97706;   /* Attention & Warning Accent */
+  --color-brand-saffron-subtle: #FFFBEB;
+
+  /* Semantic Classification Colors (Layer 4 Stance Orientation) */
+  --color-crit: #DC2626;            /* STANCE_CRIT (Critical) */
+  --color-crit-subtle: #FEE2E2;
+  --color-neut: #64748B;            /* STANCE_NEUT (Neutral) */
+  --color-neut-subtle: #F1F5F9;
+  --color-supp: #16A34A;            /* STANCE_SUPP (Supportive) */
+  --color-supp-subtle: #DCFCE7;
+
+  /* Layer 1 Utility Colors */
+  --color-valid: #16A34A;
+  --color-noise: #64748B;
+  --color-pending: #2563EB;
+
+  /* Topic Classification Colors (Layer 2) */
+  --color-topic-econ: #1E3A8A;    /* Economic & Services */
+  --color-topic-for:  #0F766E;    /* Foreign Affairs */
+  --color-topic-gov:  #991B1B;    /* Governance */
+  --color-topic-law:  #166534;    /* Law & Justice */
+  --color-topic-media:#6B21A8;    /* Media */
+
+  /* Faithfulness Verdict Colors */
+  --color-supported: #16A34A;
+  --color-partially-supported: #D97706;
+  --color-unsupported: #DC2626;
+  --color-contradicted: #7F1D1D;
+
+  /* Layout Scale */
+  --radius-sm: 6px;
+  --radius-card: 10px;
+  --radius-button: 8px;
+  --radius-input: 8px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.03);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+  --shadow-card: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.02);
+  --shadow-hover: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --shadow-modal: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+
+  /* Typography System (DM Sans / Roboto / Roboto Mono) */
+  --font-heading: 'DM Sans', 'Roboto', system-ui, -apple-system, sans-serif;
+  --font-body: 'Roboto', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Roboto Mono', 'JetBrains Mono', monospace;
+}
