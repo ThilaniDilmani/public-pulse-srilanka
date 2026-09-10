@@ -11,7 +11,7 @@ class VerifierConfig:
     """Configurable parameters for faithfulness verification."""
 
     verifier_method: str = "hybrid_nli_v1"       # Primary verification method
-    verifier_model: str = "gemini-2.5-flash"      # LLM judge model name
+    verifier_model: str = "gemini-1.5-flash"      # LLM judge model name
     llm_provider: str = "gemini"                  # "gemini" or "mock"
     enable_stage1_rules: bool = True              # Enable deterministic rule checks
     enable_stage2_lexical: bool = True            # Enable lexical overlap checking
