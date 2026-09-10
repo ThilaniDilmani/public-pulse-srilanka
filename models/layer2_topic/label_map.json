@@ -1,8 +1,7 @@
 {
-  "TOPIC_ECON": 0,
-  "TOPIC_GOV": 1,
-  "TOPIC_SERV": 2,
+  "TOPIC_ECON_SERV": 0,
+  "TOPIC_FOR": 1,
+  "TOPIC_GOV": 2,
   "TOPIC_LAW": 3,
-  "TOPIC_FOR": 4,
-  "TOPIC_MEDIA": 5
+  "TOPIC_MEDIA": 4
 }

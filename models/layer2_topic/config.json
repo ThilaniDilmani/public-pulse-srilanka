@@ -1,6 +1,14 @@
 {
   "base_model": "xlm-roberta-base",
   "huggingface_hub_repo": "your-username/public-pulse-layer2-topic",
-  "num_labels": 6,
-  "max_seq_length": 256
+  "num_labels": 5,
+  "max_seq_length": 256,
+  "model_input_column": "text_clean",
+  "checkpoint_status": "AVAILABLE_AND_VERIFIED",
+  "phase2_verification": {
+    "smoke_test_result": "PASS",
+    "verified_at": "Phase 2 — local load + forward pass on xlm-roberta-base checkpoint confirmed; 5-class output (TOPIC_ECON_SERV/FOR/GOV/LAW/MEDIA) produced at correct indices",
+    "checkpoint_path": "models/layer2_topic/checkpoints/best_model"
+  },
+  "taxonomy_note": "num_labels was incorrectly 6 in the original project config. Corrected to 5 in Phase 5 to match the actual checkpoint (which uses the 5-class merged taxonomy from Phase 1 taxonomy correction). The HF checkpoint config.json in checkpoints/best_model/ has the authoritative value and was NOT modified."
 }

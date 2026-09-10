@@ -1,0 +1,100 @@
+{
+  "best_global_step": 1134,
+  "best_metric": 0.7050123837778992,
+  "best_model_checkpoint": "/content/drive/MyDrive/public-pulse-srilanka/models/layer2_topic/_training_run/checkpoint-1134",
+  "epoch": 3.0,
+  "eval_steps": 500,
+  "global_step": 1134,
+  "is_hyper_param_search": false,
+  "is_local_process_zero": true,
+  "is_world_process_zero": true,
+  "log_history": [
+    {
+      "epoch": 1.0,
+      "grad_norm": 5.934135913848877,
+      "learning_rate": 1.6764705882352943e-05,
+      "loss": 1.3734,
+      "step": 378
+    },
+    {
+      "epoch": 1.0,
+      "eval_accuracy": 0.611448395490026,
+      "eval_f1_TOPIC_ECON_SERV": 0.4878048780487805,
+      "eval_f1_TOPIC_FOR": 0.34285714285714286,
+      "eval_f1_TOPIC_GOV": 0.7360308285163777,
+      "eval_f1_TOPIC_LAW": 0.5895953757225434,
+      "eval_f1_TOPIC_MEDIA": 0.2210796915167095,
+      "eval_f1_macro": 0.4754735833323108,
+      "eval_loss": 1.0301437377929688,
+      "eval_runtime": 2.4683,
+      "eval_samples_per_second": 467.118,
+      "eval_steps_per_second": 14.99,
+      "step": 378
+    },
+    {
+      "epoch": 2.0,
+      "grad_norm": 11.810697555541992,
+      "learning_rate": 1.1220588235294119e-05,
+      "loss": 0.7818,
+      "step": 756
+    },
+    {
+      "epoch": 2.0,
+      "eval_accuracy": 0.8707718993928881,
+      "eval_f1_TOPIC_ECON_SERV": 0.5813953488372093,
+      "eval_f1_TOPIC_FOR": 0.475,
+      "eval_f1_TOPIC_GOV": 0.9262820512820513,
+      "eval_f1_TOPIC_LAW": 0.7482993197278912,
+      "eval_f1_TOPIC_MEDIA": 0.628099173553719,
+      "eval_f1_macro": 0.6718151786801742,
+      "eval_loss": 0.7771761417388916,
+      "eval_runtime": 2.4914,
+      "eval_samples_per_second": 462.788,
+      "eval_steps_per_second": 14.851,
+      "step": 756
+    },
+    {
+      "epoch": 3.0,
+      "grad_norm": 23.97193717956543,
+      "learning_rate": 5.661764705882353e-06,
+      "loss": 0.5135,
+      "step": 1134
+    },
+    {
+      "epoch": 3.0,
+      "eval_accuracy": 0.8855160450997398,
+      "eval_f1_TOPIC_ECON_SERV": 0.6046511627906976,
+      "eval_f1_TOPIC_FOR": 0.5194805194805194,
+      "eval_f1_TOPIC_GOV": 0.9353977576081153,
+      "eval_f1_TOPIC_LAW": 0.7397260273972602,
+      "eval_f1_TOPIC_MEDIA": 0.7258064516129032,
+      "eval_f1_macro": 0.7050123837778992,
+      "eval_loss": 0.8248769640922546,
+      "eval_runtime": 2.4297,
+      "eval_samples_per_second": 474.537,
+      "eval_steps_per_second": 15.228,
+      "step": 1134
+    }
+  ],
+  "logging_steps": 500,
+  "max_steps": 1512,
+  "num_input_tokens_seen": 0,
+  "num_train_epochs": 4,
+  "save_steps": 500,
+  "stateful_callbacks": {
+    "TrainerControl": {
+      "args": {
+        "should_epoch_stop": false,
+        "should_evaluate": false,
+        "should_log": false,
+        "should_save": true,
+        "should_training_stop": false
+      },
+      "attributes": {}
+    }
+  },
+  "total_flos": 1237244201985612.0,
+  "train_batch_size": 16,
+  "trial_name": null,
+  "trial_params": null
+}
