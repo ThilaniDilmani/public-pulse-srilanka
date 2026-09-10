@@ -459,10 +459,24 @@ def insert_evidence_set(
     db.flush()
 
     for item in items:
+        comment_id = getattr(item, "comment_id", None) if not isinstance(item, dict) else item.get("comment_id")
+        if isinstance(comment_id, str):
+            try:
+                comment_id = uuid_mod.UUID(comment_id)
+            except ValueError:
+                pass
+
+        evidence_type = getattr(item, "evidence_type", "retrieved_sample") if not isinstance(item, dict) else item.get("evidence_type", "retrieved_sample")
+        layer = getattr(item, "layer", None) if not isinstance(item, dict) else item.get("layer")
+        label = getattr(item, "label", None) if not isinstance(item, dict) else item.get("label")
+        confidence = getattr(item, "confidence", None) if not isinstance(item, dict) else item.get("confidence")
+        relevance_score = getattr(item, "relevance_score", None) if not isinstance(item, dict) else item.get("relevance_score")
+        rank = getattr(item, "rank", None) if not isinstance(item, dict) else item.get("rank")
+
         # Check idempotency per (evidence_set_id, comment_id)
         stmt = select(Evidence).where(
             Evidence.evidence_set_id == ev_set.id,
-            Evidence.comment_id == item["comment_id"],
+            Evidence.comment_id == comment_id,
         )
         existing = db.execute(stmt).scalar_one_or_none()
         if existing is not None:
@@ -470,13 +484,13 @@ def insert_evidence_set(
 
         ev = Evidence(
             evidence_set_id=ev_set.id,
-            comment_id=item["comment_id"],
-            evidence_type=item.get("evidence_type", "retrieved_sample"),
-            layer=item.get("layer"),
-            label=item.get("label"),
-            confidence=item.get("confidence"),
-            relevance_score=item.get("relevance_score"),
-            rank=item.get("rank"),
+            comment_id=comment_id,
+            evidence_type=evidence_type,
+            layer=layer,
+            label=label,
+            confidence=confidence,
+            relevance_score=relevance_score,
+            rank=rank,
         )
         db.add(ev)
 
@@ -616,6 +630,35 @@ def get_insight(
         stmt_str = select(Insight).where(Insight.id.cast(String) == id_str)
         result = db.execute(stmt_str).scalar_one_or_none()
     return result
+
+
+def list_insights(
+    db: Session,
+    *,
+    program_id: Optional[Any] = None,
+    generation_status: Optional[str] = None,
+    limit: int = 20,
+    offset: int = 0,
+) -> List[Insight]:
+    """Fetch insights with optional program_id and generation_status filters."""
+    stmt = select(Insight)
+    if program_id is not None:
+        if isinstance(program_id, str):
+            try:
+                program_id = uuid_mod.UUID(program_id)
+            except ValueError:
+                pass
+        stmt = stmt.where(Insight.program_id == program_id)
+
+    if generation_status:
+        if generation_status in ("completed", "success"):
+            stmt = stmt.where(Insight.generation_status.in_(["completed", "success"]))
+        else:
+            stmt = stmt.where(Insight.generation_status == generation_status)
+
+    stmt = stmt.order_by(desc(Insight.generated_at).nullslast(), desc(Insight.id)).limit(limit).offset(offset)
+    return list(db.execute(stmt).scalars().all())
+
 
 
 # ---------------------------------------------------------------------------
@@ -933,17 +976,13 @@ def get_analytics_overview(
     end_date: Optional[datetime] = None,
 ) -> dict:
     """Calculate overview KPIs (total comments, valid, noise, noise rate, etc.)."""
+    from sqlalchemy import case as sa_case  # local import to avoid top-level change
+
     stmt = select(
         func.count(Comment.id).label("total_comments"),
-        func.count(
-            func.nullif(Comment.processing_status != ProcessingStatusEnum.scored, True)
-        ).label("scored_comments"),
-        func.count(
-            func.nullif(Comment.processing_status != ProcessingStatusEnum.noise_exit, True)
-        ).label("noise_comments"),
-        func.count(
-            func.nullif(Comment.processing_status != ProcessingStatusEnum.pending, True)
-        ).label("pending_comments"),
+        func.sum(sa_case((Comment.processing_status == ProcessingStatusEnum.scored, 1), else_=0)).label("scored_comments"),
+        func.sum(sa_case((Comment.processing_status == ProcessingStatusEnum.noise_exit, 1), else_=0)).label("noise_comments"),
+        func.sum(sa_case((Comment.processing_status == ProcessingStatusEnum.pending, 1), else_=0)).label("pending_comments"),
     )
     stmt = _apply_comment_filters(
         stmt,
@@ -954,10 +993,10 @@ def get_analytics_overview(
         end_date=end_date,
     )
     res = db.execute(stmt).one()
-    total = res.total_comments or 0
-    scored = res.scored_comments or 0
-    noise = res.noise_comments or 0
-    pending = res.pending_comments or 0
+    total = int(res.total_comments or 0)
+    scored = int(res.scored_comments or 0)
+    noise = int(res.noise_comments or 0)
+    pending = int(res.pending_comments or 0)
     valid = scored
 
     noise_rate = round(noise / total, 4) if total > 0 else 0.0
@@ -969,7 +1008,10 @@ def get_analytics_overview(
         except ValueError:
             pass
     elif channel_id:
-        v_stmt = v_stmt.join(Program).where(Program.channel_id == uuid_mod.UUID(channel_id))
+        try:
+            v_stmt = v_stmt.join(Program).where(Program.channel_id == uuid_mod.UUID(channel_id))
+        except ValueError:
+            pass
     total_videos = db.execute(v_stmt).scalar() or 0
 
     p_stmt = select(func.count(Program.id))
@@ -1450,17 +1492,32 @@ def get_faithfulness_analytics(
             "total_verifications": 0,
             "mean_grounding_score": 0.0,
             "mean_claim_support_rate": 0.0,
+            "mean_partial_support_rate": 0.0,
+            "mean_unsupported_claim_rate": 0.0,
             "mean_contradiction_rate": 0.0,
+            "mean_citation_precision": 0.0,
         }
 
     total = len(results)
     mean_grounding = sum(r.grounding_score for r in results) / total
     mean_csr = sum(r.claim_support_rate for r in results) / total
+    mean_psr = sum(
+        (r.verification_details_json.get("partial_support_rate", 0.0) if isinstance(r.verification_details_json, dict) else 0.0)
+        for r in results
+    ) / total
+    mean_ucr = sum(r.unsupported_claim_rate for r in results) / total
     mean_cr = sum(r.contradiction_rate for r in results) / total
+    mean_prec = sum(
+        (r.verification_details_json.get("evidence_citation_precision", 0.0) if isinstance(r.verification_details_json, dict) else 0.0)
+        for r in results
+    ) / total
 
     return {
         "total_verifications": total,
         "mean_grounding_score": round(mean_grounding, 4),
         "mean_claim_support_rate": round(mean_csr, 4),
+        "mean_partial_support_rate": round(mean_psr, 4),
+        "mean_unsupported_claim_rate": round(mean_ucr, 4),
         "mean_contradiction_rate": round(mean_cr, 4),
+        "mean_citation_precision": round(mean_prec, 4),
     }
