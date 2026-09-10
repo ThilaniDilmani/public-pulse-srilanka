@@ -1,0 +1,22 @@
+{
+  "base_model": "xlm-roberta-base",
+  "num_labels": 3,
+  "labels": [
+    "STANCE_CRIT",
+    "STANCE_NEUT",
+    "STANCE_SUPP"
+  ],
+  "max_seq_length": 256,
+  "model_input_column": "text_clean",
+  "best_metric": "f1_macro",
+  "best_metric_value": 0.8649461493849765,
+  "class_weights_used": {
+    "STANCE_CRIT": 0.4975,
+    "STANCE_NEUT": 1.3788,
+    "STANCE_SUPP": 3.778
+  },
+  "taxonomy_note": "3-class merged taxonomy (STANCE_CRIT_DIR+STANCE_CRIT_SARC -> STANCE_CRIT). Direct/sarcastic distinction deferred to v2 -- documented scope decision, see 01_data_preparation.ipynb Section 9.",
+  "random_seed": 42,
+  "train_rows": 5667,
+  "val_rows": 1153
+}

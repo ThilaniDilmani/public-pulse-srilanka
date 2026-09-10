@@ -2,5 +2,12 @@
   "base_model": "xlm-roberta-base",
   "huggingface_hub_repo": "your-username/public-pulse-layer1-utility",
   "num_labels": 2,
-  "max_seq_length": 256
+  "max_seq_length": 256,
+  "model_input_column": "text_raw",
+  "checkpoint_status": "AVAILABLE_AND_VERIFIED",
+  "phase2_verification": {
+    "smoke_test_result": "PASS",
+    "verified_at": "Phase 2 — local load + forward pass on xlm-roberta-base checkpoint confirmed; labels VALID/NOISE produced at correct indices",
+    "checkpoint_path": "models/layer1_utility/checkpoints/best_model"
+  }
 }

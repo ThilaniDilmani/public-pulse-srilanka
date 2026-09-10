@@ -1,7 +1,0 @@
-{
-  "base_model": "xlm-roberta-base",
-  "huggingface_hub_repo": "your-username/public-pulse-layer3-subissue",
-  "num_labels": null,
-  "max_seq_length": 256,
-  "note": "Finalize num_labels and label_map.json once sub-issue taxonomy is locked during annotation."
-}

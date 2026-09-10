@@ -1,4 +1,4 @@
-﻿"""Insights endpoints (Phase 11).
+"""Insights endpoints (Phase 11).
 
 Async generation via Phase 9 GroundedInsightGenerator.
 Returns 202 Accepted with job reference for polling.
@@ -31,15 +31,6 @@ def generate_insight(
         )
 
 
-@router.get("/{insight_id}", response_model=InsightOut)
-def get_insight(insight_id: str, db: Session = Depends(get_db)):
-    """Retrieve a generated insight by ID."""
-    ins = InsightApiService.get_insight(db, insight_id)
-    if not ins:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Insight not found")
-    return ins
-
-
 @router.get("", response_model=List[InsightOut])
 def list_insights(
     program_id: Optional[str] = Query(None),
@@ -52,3 +43,12 @@ def list_insights(
     return InsightApiService.list_insights(
         db, program_id=program_id, limit=limit, offset=offset, generation_status=generation_status
     )
+
+
+@router.get("/{insight_id}", response_model=InsightOut)
+def get_insight(insight_id: str, db: Session = Depends(get_db)):
+    """Retrieve a generated insight by ID."""
+    ins = InsightApiService.get_insight(db, insight_id)
+    if not ins:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Insight not found")
+    return ins

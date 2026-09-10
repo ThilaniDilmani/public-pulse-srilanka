@@ -1,19 +1,26 @@
 {
   "base_model": "xlm-roberta-base",
-  "num_labels": 6,
+  "num_labels": 5,
+  "labels": [
+    "TOPIC_ECON_SERV",
+    "TOPIC_FOR",
+    "TOPIC_GOV",
+    "TOPIC_LAW",
+    "TOPIC_MEDIA"
+  ],
   "max_seq_length": 256,
+  "model_input_column": "text_clean",
   "best_metric": "f1_macro",
-  "best_metric_value": 0.6853518709719536,
+  "best_metric_value": 0.7050123837778992,
   "class_weights_used": {
-    "TOPIC_ECON": 3.1957,
-    "TOPIC_FOR": 2.5646,
-    "TOPIC_GOV": 0.2314,
-    "TOPIC_LAW": 2.5646,
-    "TOPIC_MEDIA": 2.5646,
-    "TOPIC_SERV": 5.1036
+    "TOPIC_ECON_SERV": 3.0165,
+    "TOPIC_FOR": 3.0165,
+    "TOPIC_GOV": 0.2722,
+    "TOPIC_LAW": 3.0165,
+    "TOPIC_MEDIA": 3.0165
   },
-  "weighting_note": "Weights computed from post-oversampling train distribution, not pre-oversampling -- see Section 6",
+  "taxonomy_note": "5-class merged taxonomy (TOPIC_ECON+TOPIC_SERV -> TOPIC_ECON_SERV), documented scope decision -- see 01_data_preparation.ipynb Section 9",
   "random_seed": 42,
-  "train_rows": 6155,
+  "train_rows": 6033,
   "val_rows": 1153
 }
