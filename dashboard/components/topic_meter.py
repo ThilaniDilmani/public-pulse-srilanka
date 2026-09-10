@@ -1,1 +1,0 @@
-"""Topic breakdown meter component."""
