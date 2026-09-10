@@ -1,4 +1,4 @@
-﻿"""Insight API service connecting REST endpoints to Phase 9 Grounded Insight Generator (Phase 11).
+"""Insight API service connecting REST endpoints to Phase 9 Grounded Insight Generator (Phase 11).
 
 Insight generation runs asynchronously via background worker.
 """
@@ -84,7 +84,12 @@ def _bg_generate_insight(job_id: str, evidence_set_id: str, program_id: Optional
         generated = p9_service.generate_and_persist(db, payload)
 
         # Retrieve inserted insight record ID
-        inserted_insight = repository.get_insight(db, str(es.id))
+        inserted_insight = (
+            db.query(repository.Insight)
+            .filter(repository.Insight.evidence_set_id == es.id)
+            .order_by(repository.desc(repository.Insight.generated_at))
+            .first()
+        )
         insight_id = str(inserted_insight.id) if inserted_insight else None
 
         JobService.update_job(db, job_id, status="completed", reference_id=insight_id)

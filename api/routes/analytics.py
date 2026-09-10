@@ -13,6 +13,7 @@ Provides maximum-analysis server-side aggregate endpoints:
 - Faithfulness analytics
 """
 
+from datetime import datetime
 from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
@@ -39,11 +40,18 @@ def get_analytics_overview(
     program_id: Optional[str] = Query(None),
     channel_id: Optional[str] = Query(None),
     video_id: Optional[str] = Query(None),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     db: Session = Depends(get_db),
 ):
     """Get overview KPI metrics."""
     return AnalyticsService.get_overview_kpis(
-        db, program_id=program_id, channel_id=channel_id, video_id=video_id
+        db,
+        program_id=program_id,
+        channel_id=channel_id,
+        video_id=video_id,
+        start_date=start_date,
+        end_date=end_date,
     )
 
 
@@ -52,11 +60,18 @@ def get_topic_distribution(
     program_id: Optional[str] = Query(None),
     channel_id: Optional[str] = Query(None),
     video_id: Optional[str] = Query(None),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     db: Session = Depends(get_db),
 ):
     """Get Layer 2 macro-topic breakdown."""
     return AnalyticsService.get_topic_distribution(
-        db, program_id=program_id, channel_id=channel_id, video_id=video_id
+        db,
+        program_id=program_id,
+        channel_id=channel_id,
+        video_id=video_id,
+        start_date=start_date,
+        end_date=end_date,
     )
 
 
@@ -66,6 +81,8 @@ def get_stance_distribution(
     channel_id: Optional[str] = Query(None),
     video_id: Optional[str] = Query(None),
     topic_filter: Optional[str] = Query(None),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     db: Session = Depends(get_db),
 ):
     """Get Layer 4 stance distribution."""
@@ -75,6 +92,8 @@ def get_stance_distribution(
         channel_id=channel_id,
         video_id=video_id,
         topic_filter=topic_filter,
+        start_date=start_date,
+        end_date=end_date,
     )
 
 
@@ -83,11 +102,18 @@ def get_topic_stance_matrix(
     program_id: Optional[str] = Query(None),
     channel_id: Optional[str] = Query(None),
     video_id: Optional[str] = Query(None),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     db: Session = Depends(get_db),
 ):
     """Get Topic x Stance cross-tabulation matrix."""
     return AnalyticsService.get_topic_stance_matrix(
-        db, program_id=program_id, channel_id=channel_id, video_id=video_id
+        db,
+        program_id=program_id,
+        channel_id=channel_id,
+        video_id=video_id,
+        start_date=start_date,
+        end_date=end_date,
     )
 
 
@@ -96,11 +122,18 @@ def get_entity_matrix(
     entity_type: str = Query("program", pattern="^(program|channel)$"),
     matrix_type: str = Query("topic", pattern="^(topic|stance)$"),
     channel_id: Optional[str] = Query(None),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     db: Session = Depends(get_db),
 ):
     """Get Program x Topic, Program x Stance, Channel x Topic, or Channel x Stance comparison matrix."""
     return AnalyticsService.get_entity_matrix(
-        db, entity_type=entity_type, matrix_type=matrix_type, channel_id=channel_id
+        db,
+        entity_type=entity_type,
+        matrix_type=matrix_type,
+        channel_id=channel_id,
+        start_date=start_date,
+        end_date=end_date,
     )
 
 
@@ -110,6 +143,8 @@ def get_volume_over_time(
     channel_id: Optional[str] = Query(None),
     video_id: Optional[str] = Query(None),
     granularity: str = Query("daily", pattern="^(daily|weekly|monthly)$"),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     db: Session = Depends(get_db),
 ):
     """Get volume trend time-series data."""
@@ -119,6 +154,8 @@ def get_volume_over_time(
         channel_id=channel_id,
         video_id=video_id,
         granularity=granularity,
+        start_date=start_date,
+        end_date=end_date,
     )
 
 
@@ -153,10 +190,18 @@ def get_episode_analytics(
 def get_data_quality(
     program_id: Optional[str] = Query(None),
     channel_id: Optional[str] = Query(None),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     db: Session = Depends(get_db),
 ):
     """Get pipeline data quality and confidence analytics."""
-    return AnalyticsService.get_data_quality(db, program_id=program_id, channel_id=channel_id)
+    return AnalyticsService.get_data_quality(
+        db,
+        program_id=program_id,
+        channel_id=channel_id,
+        start_date=start_date,
+        end_date=end_date,
+    )
 
 
 @router.get("/faithfulness", response_model=FaithfulnessAnalyticsOut)

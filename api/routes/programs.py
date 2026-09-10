@@ -3,6 +3,7 @@
 Strictly preserves CHANNEL -> PROGRAM -> VIDEO -> COMMENT hierarchy.
 """
 
+from datetime import datetime
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
@@ -57,56 +58,85 @@ def list_program_videos(
 
 
 @router.get("/{program_id}/analytics/overview", response_model=OverviewKPIOut)
-def get_program_analytics_overview(program_id: str, db: Session = Depends(get_db)):
+def get_program_analytics_overview(
+    program_id: str,
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
+    db: Session = Depends(get_db),
+):
     """Get overview KPIs for a specific program."""
     p = CatalogService.get_program(db, program_id)
     if not p:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Program not found")
-    return AnalyticsService.get_overview_kpis(db, program_id=program_id)
+    return AnalyticsService.get_overview_kpis(
+        db, program_id=program_id, start_date=start_date, end_date=end_date
+    )
 
 
 @router.get("/{program_id}/analytics/topics", response_model=TopicDistributionOut)
-def get_program_topic_distribution(program_id: str, db: Session = Depends(get_db)):
+def get_program_topic_distribution(
+    program_id: str,
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
+    db: Session = Depends(get_db),
+):
     """Get Layer 2 macro-topic breakdown for a specific program."""
     p = CatalogService.get_program(db, program_id)
     if not p:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Program not found")
-    return AnalyticsService.get_topic_distribution(db, program_id=program_id)
+    return AnalyticsService.get_topic_distribution(
+        db, program_id=program_id, start_date=start_date, end_date=end_date
+    )
 
 
 @router.get("/{program_id}/analytics/stances", response_model=StanceDistributionOut)
 def get_program_stance_distribution(
     program_id: str,
     topic: Optional[str] = Query(None, description="Filter by macro-topic"),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     db: Session = Depends(get_db),
 ):
     """Get Layer 4 stance distribution for a specific program."""
     p = CatalogService.get_program(db, program_id)
     if not p:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Program not found")
-    return AnalyticsService.get_stance_distribution(db, program_id=program_id, topic_filter=topic)
+    return AnalyticsService.get_stance_distribution(
+        db, program_id=program_id, topic_filter=topic, start_date=start_date, end_date=end_date
+    )
 
 
 @router.get("/{program_id}/analytics/topic-stance-matrix", response_model=TopicStanceMatrixOut)
-def get_program_topic_stance_matrix(program_id: str, db: Session = Depends(get_db)):
+def get_program_topic_stance_matrix(
+    program_id: str,
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
+    db: Session = Depends(get_db),
+):
     """Get Topic x Stance matrix for a specific program."""
     p = CatalogService.get_program(db, program_id)
     if not p:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Program not found")
-    return AnalyticsService.get_topic_stance_matrix(db, program_id=program_id)
+    return AnalyticsService.get_topic_stance_matrix(
+        db, program_id=program_id, start_date=start_date, end_date=end_date
+    )
 
 
 @router.get("/{program_id}/analytics/volume-over-time", response_model=VolumeOverTimeOut)
 def get_program_volume_over_time(
     program_id: str,
     granularity: str = Query("daily", pattern="^(daily|weekly|monthly)$"),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     db: Session = Depends(get_db),
 ):
     """Get comment volume trend time series for a program."""
     p = CatalogService.get_program(db, program_id)
     if not p:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Program not found")
-    return AnalyticsService.get_volume_over_time(db, program_id=program_id, granularity=granularity)
+    return AnalyticsService.get_volume_over_time(
+        db, program_id=program_id, granularity=granularity, start_date=start_date, end_date=end_date
+    )
 
 
 @router.get("/{program_id}/insights", response_model=List[InsightOut])
