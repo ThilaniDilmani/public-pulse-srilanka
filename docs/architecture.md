@@ -1,7 +1,13 @@
 # Public Pulse — Repository & System Architecture
 
 Philosophy: **Industry Best Practices + Research Reproducibility + Student Practicality + Free-Tier Cloud.**
-Nothing enterprise-grade for its own sake. Every folder, tool, and workflow below exists because Public Pulse's specific pipeline (14-source scrape → 4-layer modular XLM-RoBERTa cascade → Postgres → FastAPI → dashboard, all on free tiers) actually needs it.
+Nothing enterprise-grade for its own sake. Every folder, tool, and workflow below exists because Public Pulse's specific pipeline (14-program scrape → 3-layer modular XLM-RoBERTa cascade [Layer 1 → Layer 2 → Layer 4] → Postgres → FastAPI → dashboard, all on free tiers) actually needs it.
+
+> Layer 3 (fine-grained sub-issue) was removed as a documented research-scope
+> decision. The layer numbering (1, 2, 4) is intentional, not a typo — see
+> `docs/taxonomy.md` for the full record. Every "4-layer"/"layer1→2→3→4"
+> reference that may still appear elsewhere in this project's history is
+> superseded by this document.
 
 ---
 
@@ -16,10 +22,9 @@ public-pulse/
 │   ├── processed/               # cleaned, ready for annotation/training
 │   ├── annotations/             # manual labels, IAA files, label guidelines
 │   ├── golden_sample/           # the ~2,000-row annotated gold set
-│   └── splits/                  # train/ val/ test/ per layer
+│   └── splits/                  # train/ val/ test/ per active layer (no layer3/)
 │       ├── layer1/
 │       ├── layer2/
-│       ├── layer3/
 │       └── layer4/
 │
 ├── notebooks/
@@ -30,8 +35,7 @@ public-pulse/
 │   ├── 05_annotation_analysis/
 │   ├── 06_layer1_utility/
 │   ├── 07_layer2_topic/
-│   ├── 08_layer3_subissue/
-│   ├── 09_layer4_stance/
+│   ├── 09_layer4_stance/       # numbering kept as-is; 08_layer3_subissue removed
 │   ├── 10_model_comparison/
 │   ├── 11_error_analysis/
 │   └── 12_final_inference/
@@ -44,7 +48,7 @@ public-pulse/
 │       ├── models/              # model wrappers per layer (shared base class)
 │       ├── training/            # trainer, callbacks, metrics
 │       ├── evaluation/          # confusion matrices, reports
-│       ├── inference/           # cascade runner (layer1→2→3→4)
+│       ├── inference/           # cascade runner (layer1→2→4, no layer3)
 │       ├── database/            # SQLAlchemy models, repository/query layer
 │       ├── pipeline/            # orchestration: scrape→clean→score→store
 │       └── utils/                # config loading, logging, io helpers
@@ -55,8 +59,7 @@ public-pulse/
 │   │   ├── label_map.json
 │   │   └── checkpoints/         # gitignored, or DVC/HF Hub pointer
 │   ├── layer2_topic/
-│   ├── layer3_subissue/
-│   └── layer4_stance/
+│   └── layer4_stance/          # no layer3_subissue/ -- removed
 │
 ├── results/
 │   ├── eda/
@@ -71,8 +74,7 @@ public-pulse/
 │   ├── base.yaml
 │   ├── layer1.yaml
 │   ├── layer2.yaml
-│   ├── layer3.yaml
-│   ├── layer4.yaml
+│   ├── layer4.yaml          # no layer3.yaml -- removed
 │   └── deployment.yaml
 │
 ├── tests/
@@ -164,10 +166,10 @@ public-pulse/
 03_data_preprocessing/  → normalization decisions, tokenizer behavior on Sinhala/Singlish
 04_eda/                 → volume by channel, comment length, emoji frequency, language mix
 05_annotation_analysis/ → inter-annotator agreement, label distribution in golden sample
-06-09_layerN_*/         → one notebook family per layer: train, tune, evaluate
+06,07,09_layerN_*/      → one notebook family per active layer (Layer 1, 2, 4 -- no Layer 3): train, tune, evaluate
 10_model_comparison/    → cross-layer/cross-checkpoint comparison
 11_error_analysis/      → misclassifications, confusion patterns, hard examples
-12_final_inference/     → run the full 4-layer cascade end-to-end on a sample
+12_final_inference/     → run the full 3-layer cascade (Layer 1 → Layer 2 → Layer 4) end-to-end on a sample
 ```
 
 Lifecycle rule: a notebook is for **exploration and one-off analysis**. The moment code from a notebook gets called a second time (by another notebook, a script, or the API), it moves into `src/`. Notebooks should shrink over the project's life as more logic migrates out — a healthy sign, not a loss of work.
@@ -188,40 +190,40 @@ Refactor rule of thumb: if you copy-paste a cell into a second notebook, stop �
 
 ---
 
-## E. `src/` Architecture — Shared Components for 4 Independent Layers
+## E. `src/` Architecture — Shared Components for 3 Active Layers
 
 ```text
 src/public_pulse/
 ├── data/           # shared: load_raw(), dedup(), validate_schema()
-├── preprocessing/  # shared: normalize_text(), handle_codeswitch(), tokenize()
+├── preprocessing/  # clean_text(), get_layer1_input(), build_text_variants() (Phase 3)
 ├── labels/         # shared: LabelMap class, taxonomy versioning per layer
 ├── models/
 │   ├── base.py     # BaseClassifier: load/save/predict contract
 │   ├── layer1.py   # UtilityClassifier(BaseClassifier)
 │   ├── layer2.py   # TopicClassifier(BaseClassifier)
-│   ├── layer3.py   # SubIssueClassifier(BaseClassifier)
-│   └── layer4.py   # StanceClassifier(BaseClassifier)
+│   └── layer4.py   # StanceClassifier(BaseClassifier) -- no layer3.py
 ├── training/       # shared Trainer class, layer-specific config injected
 ├── evaluation/      # shared metrics.py (works for any layer given label_map)
 ├── inference/
-│   └── cascade.py  # runs layer1→2→3→4 sequentially, respects early-exit
+│   └── cascade.py  # runs layer1→2→4 sequentially, respects early-exit
 ├── database/       # SQLAlchemy models + repository functions
 └── pipeline/       # orchestrates scrape→clean→score→store end-to-end
 ```
 
-**Decoupling principle:** the four layers share *infrastructure* (a common `BaseClassifier`, common tokenization, common metrics functions, common DB writer) but never share *state* — each layer's model, label map, and checkpoint are independent artifacts. This is what "modular, not multi-task" means at the code level: `cascade.py` is the only file that knows all four layers exist; each `layerN.py` only knows its own labels.
+**Decoupling principle:** the three active layers share *infrastructure* (a common `BaseClassifier`, common tokenization, common metrics functions, common DB writer) but never share *state* — each layer's model, label map, and checkpoint are independent artifacts. This is what "modular, not multi-task" means at the code level: `cascade.py` is the only file that knows all three layers exist; each `layerN.py` only knows its own labels.
 
 ---
 
-## F. Four-Layer Model Organization
+## F. Three-Layer Model Organization (Layer 1, 2, 4)
 
 ```text
 models/
 ├── layer1_utility/{config.json, label_map.json, checkpoints/}
 ├── layer2_topic/{...}
-├── layer3_subissue/{...}
 └── layer4_stance/{config.json, label_map.json, checkpoints/}
 ```
+
+(No `layer3_subissue/` — removed as a documented research-scope decision.)
 
 Trained checkpoints (often 400MB–1.1GB each) should **not** be committed to GitHub — GitHub has a 100MB hard file limit and repo-bloat problems well before that. Recommended alternative: push checkpoints to the **Hugging Face Hub** (free, designed for exactly this, and it's already where your FastAPI inference space lives — one less integration to build) or use **DVC with a free remote** (e.g., a Google Drive or free-tier S3-compatible bucket) if you want Git-linked versioning of weights. For a student project, Hugging Face Hub is simpler and sufficient — commit only `config.json` and `label_map.json` to Git, reference the Hub repo ID in `configs/layerN.yaml`.
 
@@ -256,6 +258,9 @@ model_versions (id, layer, checkpoint_ref, trained_at, metrics_json)
 processing_runs (id, run_type, started_at, finished_at, status, rows_processed)
 ```
 
+`layer` takes one of exactly three values: `layer1`, `layer2`, `layer4`.
+There is no `layer3` value — this is intentional, not a gap to fill in later.
+
 Deliberately not over-engineered: no separate "users" table (dashboard is read-only/public), no event-sourcing, no soft-delete framework — just enough normalization to avoid duplicate scraping and to trace every prediction back to the model version that produced it.
 
 ---
@@ -279,7 +284,10 @@ Kept as a top-level folder, not inside `src/`, because it's a deployable unit (i
 ```text
 dashboard/
 ├── app.py
-└── components/     # sentiment_tracker.py, topic_meter.py, program_compare.py, sarcasm_view.py
+└── components/     # sentiment_tracker.py, topic_meter.py, program_compare.py,
+                    # sarcasm_view.py (flagged pending a product decision --
+                    # sarcasm is not a distinct Layer 4 output; see the file's
+                    # own docstring)
 ```
 
 Talks only to Postgres (directly, or via the FastAPI `/comments` etc. endpoints) — never imports training code. This means the dashboard can be redeployed, redesigned, or even rewritten in a different framework without touching the ML pipeline at all.
@@ -341,7 +349,7 @@ deployment/docker/
 └── .dockerignore        # excludes data/, notebooks/, results/, .git
 ```
 
-Key concerns: pin dependency versions exactly (HF Spaces builds should be reproducible), load all four model checkpoints once at container start (not per-request), and set `HF_HOME`/cache env vars so checkpoints pulled from the Hub are cached in the image layer rather than re-downloaded on every cold start.
+Key concerns: pin dependency versions exactly (HF Spaces builds should be reproducible), load all three active model checkpoints (Layer 1, 2, 4 — no Layer 3) once at container start (not per-request), and set `HF_HOME`/cache env vars so checkpoints pulled from the Hub are cached in the image layer rather than re-downloaded on every cold start.
 
 ---
 
@@ -421,8 +429,8 @@ This is **designed to operate within free-tier limits at the expected project sc
 2. Database schema stood up in Supabase/Neon, existing Excel/Sheets data migrated in
 3. `src/public_pulse/data` + `preprocessing` extracted and tested — this unblocks everything downstream
 4. Golden Sample annotation completed using the finalized taxonomy
-5. Layer 1 (utility) trained first — cheapest, highest leverage (filters junk before Layers 2–4 ever run)
-6. Layers 2–4 trained in sequence, each with its own notebook family and `src/models/layerN.py`
+5. Layer 1 (utility) trained first — cheapest, highest leverage (filters junk before Layer 2 or Layer 4 ever run)
+6. Layer 2 and Layer 4 trained next, each with its own notebook family and `src/models/layerN.py` (no Layer 3)
 7. Cascade inference (`src/public_pulse/inference/cascade.py`) built and tested end-to-end on held-out data
 8. FastAPI service wrapping the cascade, deployed to HF Spaces as a **scheduled batch scorer**, not live inference
 9. Dashboard built against pre-scored Postgres data
@@ -433,4 +441,4 @@ This is **designed to operate within free-tier limits at the expected project sc
 
 ### Recommended Final Architecture (single answer, Section 20)
 
-Everything above **is** the one recommended architecture — no competing alternatives. The core commitments driving every decision: raw data is sacred and untouched (`data/raw/`), all reusable logic lives in one importable package (`src/public_pulse/`), each of the four layers is an independently trained/versioned model sharing only infrastructure, inference runs as a scheduled batch job rather than live per-request, and every free-tier service is chosen because it fits this specific batch-oriented shape without requiring a paid always-on server anywhere in the stack.
+Everything above **is** the one recommended architecture — no competing alternatives. The core commitments driving every decision: raw data is sacred and untouched (`data/raw/`), all reusable logic lives in one importable package (`src/public_pulse/`), each of the three active layers (Layer 1, 2, 4 — Layer 3 was removed as a documented scope decision) is an independently trained/versioned model sharing only infrastructure, inference runs as a scheduled batch job rather than live per-request, and every free-tier service is chosen because it fits this specific batch-oriented shape without requiring a paid always-on server anywhere in the stack.
