@@ -115,7 +115,7 @@ class VideoAnalyticsOut(BaseModel):
 
 
 class DataQualityAnalyticsOut(BaseModel):
-    overview: Dict
+    overview: OverviewKPIOut
     average_confidence_by_layer: Dict[str, float]
     subissue_status: str
 
@@ -124,4 +124,7 @@ class FaithfulnessAnalyticsOut(BaseModel):
     total_verifications: int
     mean_grounding_score: float
     mean_claim_support_rate: float
+    mean_partial_support_rate: float
+    mean_unsupported_claim_rate: float
     mean_contradiction_rate: float
+    mean_citation_precision: float

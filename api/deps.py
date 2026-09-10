@@ -1,37 +1,20 @@
-"""API dependencies for database session and security validation (Phase 11)."""
+"""API dependencies for database session and security validation (Phase 11).
+
+IMPORTANT: This module delegates the database engine to
+`public_pulse.database.session` which guarantees .env is loaded before the
+engine is created. Do NOT create a second engine here — that causes a silent
+SQLite fallback when DATABASE_URL is not yet in os.environ.
+"""
 
 import os
 from typing import Generator
 from fastapi import Header, HTTPException, status
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.pool import StaticPool
+from sqlalchemy.orm import Session
 
-# Environment-driven database connection string (defaults to SQLite memory for testing safety)
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///:memory:")
-
-connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
-pool_kwargs = {"poolclass": StaticPool} if "sqlite" in DATABASE_URL or DATABASE_URL == "sqlite:///:memory:" else {"pool_pre_ping": True}
-
-engine = create_engine(
-    DATABASE_URL,
-    connect_args=connect_args,
-    **pool_kwargs
-)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-if "sqlite" in DATABASE_URL or DATABASE_URL == "sqlite:///:memory:":
-    from public_pulse.database.models import Base
-    Base.metadata.create_all(bind=engine)
-
-
-def get_db() -> Generator[Session, None, None]:
-    """Dependency producing a SQLAlchemy Session per HTTP request."""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# Re-export the canonical session factory and get_db from session.py.
+# session.py loads .env via find_dotenv() before creating the engine, so
+# DATABASE_URL is always resolved to the real PostgreSQL URL at startup.
+from public_pulse.database.session import engine, SessionLocal, get_db  # noqa: F401
 
 
 def verify_api_key(x_api_key: str = Header(default=None)) -> str:

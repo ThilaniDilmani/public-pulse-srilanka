@@ -1,4 +1,4 @@
-﻿"""FastAPI application entrypoint for Public Pulse (Phase 11).
+"""FastAPI application entrypoint for Public Pulse (Phase 11).
 
 Analytical REST API for Sri Lankan TV news YouTube comment discourse.
 Reads pre-scored data from PostgreSQL (batch-scored by pipeline/inference).
@@ -23,6 +23,7 @@ from api.routes import (
     sentiment,
     topics,
     comments,
+    collection,
 )
 
 app = FastAPI(
@@ -38,13 +39,18 @@ app = FastAPI(
     openapi_url="/api/openapi.json",
 )
 
-# CORS Configuration
-allowed_origins = os.getenv("DASHBOARD_ORIGIN", "http://localhost:8501").split(",")
+# CORS Configuration — allow dashboard origins
+allowed_origins_env = os.getenv(
+    "DASHBOARD_ORIGIN",
+    "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174,http://localhost:3000,http://127.0.0.1:3000,http://localhost:8501,http://127.0.0.1:8501"
+)
+allowed_origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=allowed_origins if allowed_origins else ["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -76,6 +82,7 @@ app.include_router(evidence.router, prefix=PREFIX)
 app.include_router(insights.router, prefix=PREFIX)
 app.include_router(verification.router, prefix=PREFIX)
 app.include_router(jobs.router, prefix=PREFIX)
+app.include_router(collection.router, prefix=PREFIX)
 
 # Backwards compatibility / convenience top-level endpoints
 app.include_router(sentiment.router, prefix=PREFIX)
